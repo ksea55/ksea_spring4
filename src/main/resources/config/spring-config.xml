@@ -5,6 +5,13 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!--声明注入的bean-->
-    <bean id="userService" class="org.ksea.spring4.framework.ioc.simple.UserServiceImpl"/>
+   <!-- <bean id="userService" class="org.ksea.spring4.framework.ioc.simple.UserServiceImpl"/>-->
+
+    <!--
+     bean的作用域探讨
+    -->
+    <bean id="userService1" class="org.ksea.spring4.framework.ioc.simple.UserServiceImpl" scope="prototype"/>
+    <bean id="userService2" class="org.ksea.spring4.framework.ioc.simple.UserServiceImpl" scope="singleton"/>
+
 
 </beans>

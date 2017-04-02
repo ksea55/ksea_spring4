@@ -1,0 +1,17 @@
+bean的装配
+    即Bean对象的创建，容器根据代码要求创建Bean对象后再传递给代码的过程，称为Bean的装配
+
+默认装配方式
+    代码通过getBean()方式从容器获取指定的Bean实例，容器首先会调用Bean类的无参构造方法，创建空值的对象
+
+
+bean的装载模式
+    scope="prototype" 作用域原型模式
+    <bean id="userService1" class="org.ksea.spring4.framework.ioc.simple.UserServiceImpl" scope="prototype"/>
+    这种模式，在容器初始化的时候，不会进行bean的初始化，而且在调用的时候才会进行初始化，并且每个初始化的每个bean都是一个新的
+
+
+     scope="singleton" 作用域单例模式
+    <bean id="userService2" class="org.ksea.spring4.framework.ioc.simple.UserServiceImpl" scope="singleton"/>
+    <bean id="userService3" class="org.ksea.spring4.framework.ioc.simple.UserServiceImpl"/>
+    这种模式，在容器初始化的时候，会将bean进行初始化，并且是只有一个bean

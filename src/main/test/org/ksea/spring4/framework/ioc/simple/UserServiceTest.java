@@ -35,4 +35,28 @@ public class UserServiceTest {
         User user = userService.getUser();
         System.out.println(user); //User{uid=1, userName='张学友'} 这种通过spring容器来进行注入，大大的将其解耦
     }
+
+    /**
+     * 作用域prototype测试
+     */
+    @Test
+    public void getUserTestByPrototype() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("config/spring-config.xml");
+        //根据上线文获取该实例
+        UserService userService1 = (UserService) context.getBean("userService1");
+        UserService userService2 = (UserService) context.getBean("userService1");
+
+        System.out.println(userService1 == userService2);
+    }  /**
+     * 作用域prototype测试
+     */
+    @Test
+    public void getUserTestBySingleton() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("config/spring-config.xml");
+        //根据上线文获取该实例
+        UserService userService1 = (UserService) context.getBean("userService2");
+        UserService userService2 = (UserService) context.getBean("userService2");
+
+        System.out.println(userService1 == userService2);
+    }
 }

@@ -9,6 +9,7 @@
         <param-name>applicationContextConfigLocation</param-name>
         <param-value>classpath:config/spring-config.xml</param-value>
         <!--<param-value>classpath*:config/spring-config.xml</param-value>-->
+        <!--<param-value>classpath:config/*-*.xml</param-value> 通配符自定多个配置文件的加载-->
         <!--
             classpath与classpath*的区别
                   classpath:只会在当前工程的classes文件目录下查找对应的文件，如果没找到就不会再找

@@ -14,8 +14,20 @@
 
     <!--注册bean-->
     <bean id="userService" class="org.ksea.spring4.framework.aop.advice.UserServiceImpl"/>
-    <!--注册监控-->
+
+    <!--注册前置监控通知-->
     <bean id="myMethodBeforeAdvice" class="org.ksea.spring4.framework.aop.advice.MyMethodBeforeAdvice"/>
+
+    <!--注册后置监控通知-->
+    <bean id="myAfterReturningAdvice" class="org.ksea.spring4.framework.aop.advice.MyAfterReturningAdvice"></bean>
+
+
+    <!--注册spring的ThrowsAdvice异常通知服务-->
+    <bean id="myThrowsAdvice" class="org.ksea.spring4.framework.aop.advice.MyThrowsAdvice"></bean>
+
+
+    <!--注册spring的MethodInterceptor方法拦截服务-->
+    <bean id="myMethodInterceptor" class="org.ksea.spring4.framework.aop.advice.MyMethodInterceptor"></bean>
 
     <!--注入代理类-->
     <bean id="proxyUserService" class="org.springframework.aop.framework.ProxyFactoryBean">
@@ -29,7 +41,17 @@
         <property name="target" ref="userService"></property>
         <property name="interceptorNames">
             <list>
+                <!--添加前置监听-->
                 <value>myMethodBeforeAdvice</value>
+
+                <!--添加后置监听-->
+                <value>myAfterReturningAdvice</value>
+
+                <!--添加spring中的ThrowsAdvice异常监听-->
+                <value>myThrowsAdvice</value>
+
+                <!--添加spring中的MethodInterceptor方法拦截监听-->
+                <value>myMethodInterceptor</value>
             </list>
 
         </property>

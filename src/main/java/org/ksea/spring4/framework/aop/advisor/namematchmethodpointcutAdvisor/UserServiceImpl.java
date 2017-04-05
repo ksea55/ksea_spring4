@@ -1,4 +1,4 @@
-package org.ksea.spring4.framework.aop.advisor;
+package org.ksea.spring4.framework.aop.advisor.namematchmethodpointcutAdvisor;
 
 import org.springframework.stereotype.Service;
 

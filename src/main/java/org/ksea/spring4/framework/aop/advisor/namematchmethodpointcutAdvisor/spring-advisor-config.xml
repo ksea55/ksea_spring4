@@ -13,10 +13,10 @@
     <context:component-scan base-package="org.ksea.spring4.framework.aop.advisor"/>
 
     <!--注册bean-->
-    <bean id="userService" class="org.ksea.spring4.framework.aop.advisor.UserServiceImpl"/>
+    <bean id="userService" class="org.ksea.spring4.framework.aop.advisor.namematchmethodpointcutAdvisor.UserServiceImpl"/>
 
     <!--注册前置监控通知-->
-    <bean id="myMethodBeforeAdvisor" class="org.ksea.spring4.framework.aop.advisor.MyMethodBeforeAdvisor"/>
+    <bean id="myMethodBeforeAdvisor" class="org.ksea.spring4.framework.aop.advisor.namematchmethodpointcutAdvisor.MyMethodBeforeAdvisor"/>
 
     <!--注册Advisor(顾问)监听服务-->
     <bean id="myAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">

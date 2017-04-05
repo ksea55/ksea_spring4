@@ -1,4 +1,4 @@
-package org.ksea.spring4.framework.aop.advisor;
+package org.ksea.spring4.framework.aop.advisor.namematchmethodpointcutAdvisor;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,11 +11,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Created by ksea on 2017/4/5.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:org/ksea/spring4/framework/aop/advisor/spring-advisor-config.xml"})
+@ContextConfiguration(locations = {"classpath:org/ksea/spring4/framework/aop/advisor/namematchmethodpointcutAdvisor/spring-advisor-config.xml"})
 public class AopNameMatchMethodPointcutAdvisorTest {
     @Test
     public void methodBeforeAdviceTest() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("org/ksea/spring4/framework/aop/advisor/spring-advisor-config.xml");
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("org/ksea/spring4/framework/aop/advisor/namematchmethodpointcutAdvisor/spring-advisor-config.xml");
 
 
         UserService userService = (UserService) applicationContext.getBean("proxyUserService");

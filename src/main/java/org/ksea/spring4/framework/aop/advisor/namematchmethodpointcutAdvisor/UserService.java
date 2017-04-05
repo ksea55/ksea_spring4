@@ -1,4 +1,4 @@
-package org.ksea.spring4.framework.aop.advisor;
+package org.ksea.spring4.framework.aop.advisor.namematchmethodpointcutAdvisor;
 
 /**
  * Created by ksea on 2017/4/5.

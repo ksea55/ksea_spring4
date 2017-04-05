@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--用于声明上线文注解-->
+    <context:annotation-config/>
+    <!--组件包扫描器 org.ksea.spring4.framework.aop.advice-->
+    <context:component-scan base-package="org.ksea.spring4.framework.aop.advice"/>
+
+    <!--注册bean-->
+    <bean id="userService" class="org.ksea.spring4.framework.aop.advice.UserServiceImpl"/>
+    <!--注册监控-->
+    <bean id="myMethodBeforeAdvice" class="org.ksea.spring4.framework.aop.advice.MyMethodBeforeAdvice"/>
+
+    <!--注入代理类-->
+    <bean id="proxyUserService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <!--
+           这里的 proxyInterfaces 可以不指定,因为在spring中的org.springframework.aop.framework.ProxyFactoryBean类中
+           private boolean autodetectInterfaces = true;默认是处，会进行自动扫描的
+
+        -->
+        <!--<property name="proxyInterfaces" value="org.ksea.spring4.framework.aop.advice.UserService"></property>-->
+        <!--目标类，需要对那个类进行增强-->
+        <property name="target" ref="userService"></property>
+        <property name="interceptorNames">
+            <list>
+                <value>myMethodBeforeAdvice</value>
+            </list>
+
+        </property>
+    </bean>
+
+</beans>

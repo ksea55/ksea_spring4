@@ -12,7 +12,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-            <scope>test</scope>
+            <scope>compile</scope>
         </dependency>
         <!--spring dependency start-->
 
@@ -70,5 +70,15 @@
     </dependencies>
     <build>
         <finalName>ksea_spring4</finalName>
+        <!--在main进行编译的时候，将该包下的配置文件编译过来-->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
+
 </project>

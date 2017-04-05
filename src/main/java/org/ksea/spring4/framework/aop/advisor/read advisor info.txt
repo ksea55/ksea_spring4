@@ -1,0 +1,9 @@
+顾问 Advisor
+     通知(Advice)是spring提供的一种切面(Aspect) 但其功能过于简单，只能将切面织入到目标类中的所有目标方法中
+     无法完成将切面织入岛指定目标方法中。
+     顾问(Advisor)是spring提供的另一种切面，其可以完成更为复杂的切面织入功能
+        PonitcutAdvisor是顾问的一种，可以指定具体的切入点，Advisor将通知(Advice)进行了包装，会根据不同的通知类型
+        在不同的时间点，将切面织入到不同的切入点。
+        PonitcutAdvisor接口有两个较为常用的实现类:
+             NameMatchMethodPointcutAdvisor 名称匹配方法切入点顾问
+             RegexpMethodPonitcutAdvisor正则表达式匹配方法切入点顾问

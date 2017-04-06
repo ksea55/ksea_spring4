@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--用于声明上线文注解-->
+    <context:annotation-config/>
+    <!--组件包扫描器 org.ksea.spring4.framework.aop.advice-->
+    <context:component-scan base-package="org.ksea.spring4.framework.aop.advisor.beannameautoproxycreator"/>
+
+    <!--注册bean 这里注册了两个bean :userService1与userService2-->
+    <bean id="userService1" class="org.ksea.spring4.framework.aop.advisor.beannameautoproxycreator.UserServiceImpl"/>
+    <bean id="userService2" class="org.ksea.spring4.framework.aop.advisor.beannameautoproxycreator.UserServiceImpl"/>
+
+    <!--注册前置监控通知-->
+    <bean id="myMethodBeforeAdvisor" class="org.ksea.spring4.framework.aop.advisor.beannameautoproxycreator.MyMethodBeforeAdvisor"/>
+
+    <!--注册Advisor(顾问)监听服务-->
+    <bean id="myAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+        <!--注册前置通知-->
+        <property name="advice" ref="myMethodBeforeAdvisor"/>
+        <!--第一种方法:
+         为某个方法设置切入点，增强前置通知
+        <property name="mappedName" value="queryUser"></property>
+        -->
+        <!--第二种方法:给多个方法进行切入点配置 -->
+        <property name="mappedNames">
+            <list>
+                <value>queryUser</value>
+                <value>getUser</value>
+                <value>loadUser</value>
+            </list>
+        </property>
+
+        <!--第三种方法：使用方法通配符进行-->
+        <!--<property name="mappedNames" value="*User*"/>-->
+    </bean>
+
+<!--注册代理类-->
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <!--注册目标类的第一种方式-->
+        <!-- <property name="beanNames">
+                <list>
+                    &lt;!&ndash;注册目标类&ndash;&gt;
+                    <value>userService1</value>
+                    <value>userService2</value>
+                </list>
+            </property>-->
+
+        <!--注册目标类的第二种方式，通配符-->
+        <!--<property name="beanNames" value="user*"></property>-->
+
+        <!--第三种方式-->
+        <property name="beanNames" value="userService1,userService2"></property>
+
+
+
+        <!--注册advice或advisor-->
+            <property name="interceptorNames">
+                <list>
+                    <!--注册advisor-->
+                   <!-- <value>myAdvisor</value>-->
+                    <!--注册advice-->
+                    <value>myMethodBeforeAdvisor</value>
+                </list>
+            </property>
+    </bean>
+</beans>

@@ -1,0 +1,25 @@
+DefaultAdvisorAutoProxyCreator默认的自动创建代理
+
+
+<bean id="proxyUserService1" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="userService1"></property>
+        <property name="interceptorNames">
+            <list>
+                &lt;!&ndash;添加切入点顾问Advisor&ndash;&gt;
+                <value>myAdvisor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="proxyUserService2" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="userService2"></property>
+        <property name="interceptorNames">
+            <list>
+                &lt;!&ndash;添加切入点顾问Advisor&ndash;&gt;
+                <value>myAdvisor</value>
+            </list>
+        </property>
+    </bean>
+相比于ProxyFactoryBean每次只能创建一个目标类的代理对象，如果有多个目标类需要被增强，此刻代理类就会增加多个，这个造成了数据的冗余
+
+DefaultAdvisorAutoProxyCreator能为加载在容器中的目标类自动进行代理类创建，但是这种方式，就是不能指定我们需要对某个类进行增强而是全部

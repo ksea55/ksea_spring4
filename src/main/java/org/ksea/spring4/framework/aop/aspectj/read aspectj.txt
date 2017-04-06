@@ -1,0 +1,62 @@
+Aspectj
+    它是AOP功能的实现，且其实现方式更为简捷，使用更为方便，并且还支持注解式开发，因此Spring又将AspectJ的对于AOP的实现也引入到了自己的框架中
+    在Spring中使用AOP开发时，一般使用AspectJ的实现方式
+
+      AspectJ是一个面向切面的框架，它扩展了Java语言，AspectJ定义了AOP语法，它有一个专门的编译器用来生成遵守Java字节编码的规范的Class文件
+
+
+ AspectJ的同志类型
+  1、前置通知
+  2、后置通知
+  3、环绕通知
+  4、异常通知
+  5、最终通知
+  其中最终通知是指，无论程序执行是否正常，该通知都会执行，类似于try...catch中的finally代码块
+
+
+
+ AspectJ的切入点表达式
+        AspectJ除了提供了六种通知外，还定义了专门的表达式用于指定切入点，表达式的原型是:
+        execution([modifilers-pattern]) 访问权限类型
+                  ret-type-pattern 返回值类型 //必要项
+                  [declaring-type-pattern]全限定性类名
+                  name-pattern(param-pattern)方法名(参数名) //必要项
+                  [throws-pattern]抛出异常类型
+
+
+       * 表示0之多个任意字符
+
+       .. 用在方法参数中，表示任意多个参数
+          用在包名后，表示当前包及其子包路路径
+
+       + 用在类名后，表示当前类及其子类
+         用在接口后，表示当前接口及其实现类
+
+
+      举例
+         execution(public * *(..))
+         指定切入点为:任意公共方法
+
+         execution(* set*(..))
+         指定切入点为：任何一个以"set"开始的方法
+
+         execution(* com.ksea.service.*.*(..))
+         指定切入点为：定义在service包里的任意类的任意方法
+
+         execution(* com.ksea.service..*.*(..))
+         指定切入点为：定义在service包或者子包里的任意类的任意方法,".."出现在类名中时，后面必须跟"*",表示包，子包下的所有类
+
+
+        //比较常用的几个
+        execution(* *.service.*.*(..))
+        指定只有一级包下的service包下所有类或者接口中所有方法会切入点
+        如: void com.service.UserService.getUser(Integer uid);
+
+        execution(* *..service.*.*(..))
+        指定所有包下的service包中所有类或者接口中所有方法为切入点
+
+        execution(* *.UserServie.*(..))
+        指定只有一级包下的UserService接口中所有方法为切入点
+
+        execution(* *..UserService.*(..))
+        指定所有包下的UserService接口中所有方法为切入点

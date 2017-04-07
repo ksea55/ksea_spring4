@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--注册目标对象-->
+    <bean id="userService" class="org.ksea.spring4.framework.aop.aspectj.xml.UserServiceImpl"></bean>
+    <!--注册切面-->
+    <bean id="myAspect" class="org.ksea.spring4.framework.aop.aspectj.xml.MyAspect"></bean>
+
+    <!--AOP配置文件-->
+    <!--AOP配置文件-->
+    <aop:config>
+        <!--定义切入点-->
+        <!--这是通用行的定义方式-->
+        <aop:pointcut id="aspectXml" expression="execution(* *..aop.aspectj.xml..*.*(..))"></aop:pointcut>
+        <!--定义切面-->
+        <aop:aspect ref="myAspect">
+            <!--定义前置通知，这种方式访问的是无参数的情况-->
+            <aop:before method="doBefore" pointcut-ref="aspectXml"/>
+            <!--定义前置通知，这种方式访问的是带参数的情况，参数必须包括其完整的包名-->
+            <aop:before method="doBefore(org.aspectj.lang.JoinPoint)" pointcut-ref="aspectXml"/>
+
+            <!--定义后置通知-->
+            <aop:after-returning method="doAfterReturning" pointcut-ref="aspectXml"/>
+            <!--定义后置通知，并获取该返回值 注意在returning="returnValue" 中的返回值名称必须与方法doAfterReturning(Object returnValue)中的参数名称保持一致，否者会报错-->
+            <aop:after-returning method="doAfterReturning(java.lang.Object)" returning="returnValue" pointcut-ref="aspectXml"/>
+            
+            <!--定义环绕通知-->
+         <!--   <aop:around method="doAround(org.aspectj.lang.ProceedingJoinPoint)" pointcut-ref="aspectXml"/>-->
+            <!--针对环绕通知比较特殊，其参数proceedingJoinPoint是必须的，不然就不能环绕了，所以在配置环绕通知的时候，参数可以不写-->
+            <aop:around method="doAround" pointcut-ref="aspectXml"/>
+
+            <!--定义最终通知-->
+            <aop:after method="doAfter" pointcut-ref="aspectXml"/>
+
+            <!--定义异常通知-->
+            <aop:after-throwing method="doAfterThrow" pointcut-ref="aspectXml"/>
+            <!--定义异常通知，并截取异常信息-->
+            <aop:after-throwing method="doAfterThrow(java.lang.Exception)" pointcut-ref="aspectXml" throwing="ex" arg-names="ex"/>
+
+        </aop:aspect>
+    </aop:config>
+
+</beans>

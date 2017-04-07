@@ -59,4 +59,4 @@ Aspectj
         指定只有一级包下的UserService接口中所有方法为切入点
 
         execution(* *..UserService.*(..))
-        指定所有包下的UserService接口中所有方法为切入点
+        指定所有包下的UserService接口中有方法为切入点

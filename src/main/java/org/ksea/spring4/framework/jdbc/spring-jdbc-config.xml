@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--第一步：配置数据源-->
+
+    <!--第一种：Spring默认提供的数据源，这种方式一般不采用，知道就行-->
+    <bean id="springDatasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <!--注册mysql驱动-->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <!--注册mysql连接 格式为:jdbc:mysql://[host:port],[host:port].../[database][?参数名1][=参数值1][&参数名2][=参数值2]... -->
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/ksea"></property>
+        <!--注册mysql用户名-->
+        <property name="username" value="root"></property>
+        <!--注册mysql密码-->
+        <property name="password" value="ksea"></property>
+    </bean>
+
+    <!--第二种：apache DBCP数据源-->
+    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/ksea"></property>
+
+        <property name="username" value="root"></property>
+
+        <property name="password" value="ksea"></property>
+    </bean>
+
+    <!--第三种：cp03数据源连接-->
+    <bean id="comboPooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+        <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/ksea"></property>
+        <property name="user" value="root"></property>
+        <property name="password" value="ksea"></property>
+    </bean>
+
+
+    <!--第四种:jdbc中的连接数据放置在properties配置文件中-->
+
+    <!--首先加载jdbc.properties文件 第一种方式-->
+    <!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:org/ksea/spring4/framework/jdbc/jdbc.properties"></property>
+    </bean>-->
+    <!--第二种方式简便一点-->
+    <context:property-placeholder location="classpath:org/ksea/spring4/framework/jdbc/jdbc.properties"/>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="user" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+
+
+    <!--第二步：配置jdbcTemplate-->
+ <!--   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        &lt;!&ndash;配置jdbcTemplate的数据源&ndash;&gt;
+        <property name="dataSource" ref="dataSource"/>
+    </bean>-->
+
+
+    <!--
+    从源码中我们可以看到，当dataSource不会空的情况下，会自动创建一个jdbcTemplate，因此这里的第二步 可以省略
+     public final void setDataSource(DataSource dataSource) {
+        if(this.jdbcTemplate == null || dataSource != this.jdbcTemplate.getDataSource()) {
+            this.jdbcTemplate = this.createJdbcTemplate(dataSource);
+            this.initTemplateConfig();
+        }
+
+    }
+
+    -->
+
+
+    <!--第三步：将JdbcTemplate注入到Dao数据访问层中-->
+    <!--注册数据库访问层-->
+    <bean id="studentDao" class="org.ksea.spring4.framework.jdbc.dao.StudentDaoImpl">
+        <!--将jdbcTemplate注入到dao数据访问层中-->
+        <!--<property name="jdbcTemplate" ref="jdbcTemplate"></property>-->
+
+        <!--从源码分析这里可以直接注入dataSource-->
+        <property name="dataSource" ref="dataSource"/>
+
+    </bean>
+    <!--注册业务层-->
+    <bean id="studentService" class="org.ksea.spring4.framework.jdbc.service.StudentServiceImpl">
+        <property name="studentDao" ref="studentDao"/>
+    </bean>
+</beans>

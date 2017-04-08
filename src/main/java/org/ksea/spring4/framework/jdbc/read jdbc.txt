@@ -1,0 +1,15 @@
+Spring所使用的操作数据库的技术之一，
+       主要包含两部分
+                  JDBC模版的使用
+                  对于事务的管理
+
+Spring与Dao数据层部分是Spring两大核心技术Ioc与Aop的典型应用体现
+   对于JDBC模版的使用，是Ioc的应用，是将JDBC模版对象注入到Dao层的实现类
+   对于Spring的事务管理，是Aop的应用，是将事务作为切面织入到了Service层的业务方法中
+
+
+
+
+Spring与JDBC模版
+     为了避免直接使用JDBC而带来的复杂且冗长的代码，Spring提供了一个强有力的模版类JdbcTemplate来简化操作
+     并且数据源DataSource对象与模版JdbcTemplate对象均可通过Bean的形式定义在配置文件中，充分发挥了依赖注入的优势

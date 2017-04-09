@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--加载数据源配置文件-->
+    <context:property-placeholder location="classpath:org/ksea/spring4/framework/tx/jdbc.properties"/>
+    <!--配置c3p0的数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="user" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+
+
+    <!--注册事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--事务管理的数据源-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--事务代理-->
+    <bean id="stockProcessServiceProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <!--配置事务管理器，这里就相当于配置了切面-->
+        <property name="transactionManager" ref="transactionManager"></property>
+        <!--代理目标对象-->
+        <property name="target" ref="stockProcessService"></property>
+        <property name="transactionAttributes">
+            <props>
+                <!--针对所有方法开启
+               事务隔离级别是:ISOLATION_DEFAULT
+               事务传播行为是:PROPAGATION_REQUIRED-->
+                <!--<prop key="*">ISOLATION_DEFAULT,PROPAGATION_REQUIRED</prop>-->
+                <!--针对以open开头方法设置事务的隔离界别以及传播行为-->
+                <prop key="open*">ISOLATION_DEFAULT,PROPAGATION_REQUIRED</prop>
+                <!--
+                  在spring中事务管理中，其当发生的异常是Exception编译时异常时，其数据是可以进行提交的，
+                  因此在事务中设置事务回滚的时候指定其Exeception异常同样回滚 -Exception代表此异常回滚
+                  -号表示回滚rollback
+                  +号表示提交commit
+                -->
+                <prop key="stock*">ISOLATION_DEFAULT,PROPAGATION_REQUIRED,-Exception</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!--注册JdbcTemplate-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <!--注册数据源-->
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+
+    <!--注册AccountDao数据访问层-->
+    <bean id="accountDao" class="org.ksea.spring4.framework.tx.xml.dao.AccountDaoImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+    <!--注册StockDao数据访问层-->
+    <bean id="stockDao" class="org.ksea.spring4.framework.tx.xml.dao.StockDaoImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+    </bean>
+
+    <!--注册业务处理层-->
+    <bean id="stockProcessService" class="org.ksea.spring4.framework.tx.xml.service.StockProcessServiceImpl">
+        <property name="stockDao" ref="stockDao"></property>
+        <property name="accountDao" ref="accountDao"></property>
+    </bean>
+</beans>

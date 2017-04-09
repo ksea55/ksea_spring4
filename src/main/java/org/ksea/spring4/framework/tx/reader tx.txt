@@ -1,0 +1,24 @@
+Spring对事务的管理
+    l、事务管理器接口
+      事务管理器是PlatformTransactionManager接口对象，
+      其主要用于完成事务的
+       提交 void commit(TransactionStatus status);
+       回滚 void rollback(TransactionStatus status);
+      获取事务的状态信息 TransactionStatus getTransaction(TransactionDefinition definition)
+
+
+    2、常用的两个实现类
+         PlatformTransactionManager接口有两个常用的实现类:
+              DataSourceTransactionManager 使用JDBC或者iBatis或者myBatis进行持久化数据时使用
+              HibernateTransactionManager 使用Hibernate进行持久化数据时使用
+
+    3、Spring的回滚方式
+           spring事务的默认回滚方式是：发生运行时异常时后回滚，发生编译时异常提交，不过对于编译时异常，可以手工设置其回滚方式
+
+    4、事务定义接口
+       事务定义接口TransactionDefinition中定义了事务描述相关的三类常量：
+          事务隔离级别
+          事务传播行为
+          事务默认超时时限
+           及对它们的操作
+

@@ -1,4 +1,4 @@
-package org.ksea.spring4.framework.tx.annotation;
+package org.ksea.spring4.framework.tx.aspectj;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +18,10 @@ public class StockProcessTest {
     @Before
     public void before() {
         ApplicationContext applicationContext =
-                new ClassPathXmlApplicationContext("org/ksea/spring4/framework/tx/aspectj/spring-tx-config.xml");
-       //已经采用注解方式来管理事务
-        stockProcessService = (StockProcessService) applicationContext.getBean("stockProcessService");
-
+                new ClassPathXmlApplicationContext("org/ksea/spring4/framework/tx/xml/spring-tx-config.xml");
+       //stockProcessService = (StockProcessService) applicationContext.getBean("stockProcessService");
+        //加入事务之后这里要使用事务的代理对象
+        stockProcessService = (StockProcessService) applicationContext.getBean("stockProcessServiceProxy");
 
     }
 
